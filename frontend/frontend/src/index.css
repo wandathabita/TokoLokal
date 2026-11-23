@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #0f766e;
+  --color-brand-dark: #064e4b;
+  --color-accent: #facc15;
+}
+
+body {
+  margin: 0;
+  background-color: #f9fafb;
+  color: #1f2937;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
