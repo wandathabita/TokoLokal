@@ -1,38 +1,29 @@
-import { Routes, Route, Link } from 'react-router-dom'
-import Login from './pages/Login'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
+import Home from './pages/Home'
+import Catalog from './pages/Catalog'
+import Login from './pages/Login'
+import DashLayout from './layouts/DashLayout'
+import SellerDashboard from './pages/seller/Dashboard'
+import AdminDashboard from './pages/admin/Dashboard'
 
-function Home() {
-  const { user, logout } = useAuth()
-
-  return (
-    <div className="p-10">
-      <h1 className="text-3xl font-bold text-teal-700">Beranda TokoLokal</h1>
-
-      {user ? (
-        <div className="mt-4">
-          <p>Halo, {user.name} ({user.role})</p>
-          <button
-            onClick={logout}
-            className="mt-2 rounded bg-teal-700 px-4 py-2 text-white"
-          >
-            Logout
-          </button>
-        </div>
-      ) : (
-        <Link to="/login" className="mt-4 inline-block text-teal-700 underline">
-          Login
-        </Link>
-      )}
-    </div>
-  )
+function Guard({ role, children }) {
+  const { user } = useAuth()
+  return user?.role === role ? children : <Navigate to="/login" replace />
 }
 
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/katalog" element={<Catalog />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/seller" element={<Guard role="seller"><DashLayout role="seller" /></Guard>}>
+        <Route index element={<SellerDashboard />} />
+      </Route>
+      <Route path="/admin" element={<Guard role="admin"><DashLayout role="admin" /></Guard>}>
+        <Route index element={<AdminDashboard />} />
+      </Route>
     </Routes>
   )
 }
