@@ -5,11 +5,13 @@ require("dotenv").config();
 const db = require("./config/database");
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
+const sellerRoutes = require("./routes/sellerRoutes");
 
 const app = express();
 
 app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json());
+
 
 app.get("/", (req, res) => {
     res.json({
@@ -38,9 +40,14 @@ app.get("/api/db-test", async (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/seller", sellerRoutes);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+app.listen(PORT, (err) => {
+    if (err) {
+        console.error("Gagal menjalankan server:", err.message);
+        process.exit(1);
+    }
     console.log(`TokoLokal Backend berjalan di port ${PORT}`);
 });
